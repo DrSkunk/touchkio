@@ -254,7 +254,7 @@ In case `ddcutil` is installed the file `~/.config/touchkio/Cache/Brightness.vcp
 While I understand this is not ideal, it's necessary to ensure proper functionality.
 
 The display power status and brightness can be adjusted via the MQTT integration.
-**Support** for changing the power status on **DSI and HDMI** displays is achieved by checking for connected screens in `/sys/class/drm/*/status`.
+**Support** for changing the power status on **DSI and HDMI** displays is achieved by checking for connected screens in `/sys/class/drm/*/status` and using commands like `wlopm`, `kscreen-doctor`, `xset`, or `sudo ddcutil setvcp D6`.
 Support for changing the brightness of a connected display is implemented by using `sudo tee /sys/class/backlight/*/brightness` or `sudo ddcutil setvcp 10`.
 In cases where no supported backlight device is found, the Home Assistant light entity will only show an on/off switch without brightness control.
 
