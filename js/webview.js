@@ -79,6 +79,10 @@ const init = async () => {
     WEBVIEW.display = { width: 800, height: 600 };
   }
 
+  // Parse custom resolution arguments
+  const customWidth = ARGS.web_width ? parseInt(ARGS.web_width, 10) : null;
+  const customHeight = ARGS.web_height ? parseInt(ARGS.web_height, 10) : null;
+
   // Init global theme manager
   WEBVIEW.theme = {
     set: function (value) {
@@ -141,8 +145,8 @@ const init = async () => {
     icon: APP.icon,
     autoHideMenuBar: true,
     frame: !WEBVIEW.statusEnabled,
-    width: Math.floor(WEBVIEW.display.width * 0.85),
-    height: Math.floor(WEBVIEW.display.height * 0.75),
+    width: customWidth || Math.floor(WEBVIEW.display.width * 0.85),
+    height: customHeight || Math.floor(WEBVIEW.display.height * 0.75),
     minWidth: 136,
     minHeight: 136,
   });

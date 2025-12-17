@@ -118,13 +118,15 @@ The available arguments to control the kiosk application via terminal are as fol
 | `--web-url` (Required)    | -       | Url of the Home Assistant instance<a id="ref1"></a><sup><a href="#foot1">[1]</a></sup> (HTTP(S)://IP:PORT) |
 | `--web-theme` (Optional)  | `dark`  | Theme settings of the web browser (`light` or `dark`)                                                      |
 | `--web-zoom` (Optional)   | `1.25`  | Zoom settings of the web browser (`1.0` is `100%`)                                                         |
+| `--web-width` (Optional)  | -       | Window width in pixels (defaults to 85% of display width)                                                  |
+| `--web-height` (Optional) | -       | Window height in pixels (defaults to 75% of display height)                                                |
 | `--web-widget` (Optional) | `true`  | Enables the sidebar widget (`true` or `false`)                                                             |
 
 These arguments allow you to customize the appearance of the web browser view.
 
 For example:
 ```bash
-touchkio --web-url=http://192.168.1.42:8123 --web-theme=light --web-zoom=1.0
+touchkio --web-url=http://192.168.1.42:8123 --web-theme=light --web-zoom=1.0 --web-width=1920 --web-height=1080
 ```
 
 > <a id="foot1"></a><a href="#ref1">[1]</a>: This doesn't necessarily have to be a Home Assistant Url.

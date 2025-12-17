@@ -325,6 +325,16 @@ const promptArgs = async (proc) => {
       fallback: "1.25",
     },
     {
+      key: "web_width",
+      question: "Enter WEB window width (leave empty for auto)",
+      fallback: "",
+    },
+    {
+      key: "web_height",
+      question: "Enter WEB window height (leave empty for auto)",
+      fallback: "",
+    },
+    {
       key: "web_widget",
       question: "Enter WEB widget enabled",
       fallback: "true",
@@ -387,6 +397,9 @@ const promptArgs = async (proc) => {
         const value = answer.trim() || fallback;
         if (key === "web_url") {
           args[key] = value.split(",").map((v) => v.trim());
+        } else if (["web_width", "web_height"].includes(key) && value === "") {
+          // Skip empty width/height values
+          continue;
         } else {
           args[key] = value;
         }
