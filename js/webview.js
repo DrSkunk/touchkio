@@ -42,7 +42,7 @@ global.WEBVIEW = global.WEBVIEW || {
  * @returns {number|null} The parsed resolution or null if invalid.
  */
 const parseResolution = (value, maxValue, name) => {
-  if (value == null || value === "") return null;
+  if (value === null || value === undefined || value === "") return null;
   const parsed = parseInt(value, 10);
   if (!isNaN(parsed) && parsed > 0 && parsed <= maxValue) {
     return parsed;

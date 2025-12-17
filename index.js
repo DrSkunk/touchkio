@@ -295,6 +295,9 @@ const parseArgs = (proc) => {
   );
 };
 
+// Optional dimension keys that can be left empty during setup
+const OPTIONAL_DIMENSION_KEYS = ["web_width", "web_height"];
+
 /**
  * Prompts argument values on the command-line.
  *
@@ -372,7 +375,6 @@ const promptArgs = async (proc) => {
   ];
 
   // Prompt questions and wait for the answers
-  const OPTIONAL_DIMENSION_KEYS = ["web_width", "web_height"];
   let args = {};
   let ignore = [];
   try {
