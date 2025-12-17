@@ -61,7 +61,7 @@ The necessary requirements for MQTT sensors to work are listed here:
 | Name                 | Requirements                                                                                                  | References                                                                                                   |
 | -------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | App (Update)         | Requires `sudo` rights, `.deb` install and `touchkio.service` running .                                       | [#70](https://github.com/leukipp/touchkio/issues/70), [#77](https://github.com/leukipp/touchkio/issues/77)   |
-| Display (Status)     | Working `wlopm`, `kscreen-doctor` or `xset` command.                                                          | [#38](https://github.com/leukipp/touchkio/issues/38), [#57](https://github.com/leukipp/touchkio/issues/57)   |
+| Display (Status)     | Working `wlopm`, `kscreen-doctor`, `xset` or `ddcutil` command.                                               | [#38](https://github.com/leukipp/touchkio/issues/38), [#57](https://github.com/leukipp/touchkio/issues/57)   |
 | Display (Brightness) | Requires `sudo` rights, device under `/sys/class/backlight/*/brightness` exists or working `ddcutil` command. | [#30](https://github.com/leukipp/touchkio/issues/30), [#101](https://github.com/leukipp/touchkio/issues/101) |
 | Keyboard             | Raspberry Pi OS (Wayland) with `squeekboard` running.                                                         | [#7](https://github.com/leukipp/touchkio/issues/7), [#85](https://github.com/leukipp/touchkio/issues/85)     |
 | Battery              | Device under `/sys/class/power_supply/*/capacity` exists.                                                     | [#33](https://github.com/leukipp/touchkio/issues/33)                                                         |
@@ -108,6 +108,7 @@ The necessary requirements for MQTT sensors to work are listed here:
     - `wlopm --[on,off] \*` (Raspberry Pi OS, Wayland)
     - `kscreen-doctor --dpms [on,off]` (Debian KDE, Wayland)
     - `xset dpms force [on,off]` (Generic, X11)
+    - `sudo ddcutil setvcp D6 [1,5]` (HDMI displays with DDC/CI support, both Wayland and X11)
 
 </details>
 
