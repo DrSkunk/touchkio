@@ -33,6 +33,12 @@ global.WEBVIEW = global.WEBVIEW || {
   },
 };
 
+// Resolution constants
+const MAX_WIDTH = 7680; // 8K display max width
+const MAX_HEIGHT = 4320; // 8K display max height
+const DEFAULT_WIDTH_RATIO = 0.85; // Default window width as percentage of display
+const DEFAULT_HEIGHT_RATIO = 0.75; // Default window height as percentage of display
+
 /**
  * Parses and validates a resolution value.
  *
@@ -97,9 +103,7 @@ const init = async () => {
     WEBVIEW.display = { width: 800, height: 600 };
   }
 
-  // Parse custom resolution arguments (8K display max dimensions)
-  const MAX_WIDTH = 7680;
-  const MAX_HEIGHT = 4320;
+  // Parse custom resolution arguments
   const customWidth = parseResolution(ARGS.web_width, MAX_WIDTH, "--web-width");
   const customHeight = parseResolution(ARGS.web_height, MAX_HEIGHT, "--web-height");
 
@@ -165,8 +169,8 @@ const init = async () => {
     icon: APP.icon,
     autoHideMenuBar: true,
     frame: !WEBVIEW.statusEnabled,
-    width: customWidth || Math.floor(WEBVIEW.display.width * 0.85),
-    height: customHeight || Math.floor(WEBVIEW.display.height * 0.75),
+    width: customWidth || Math.floor(WEBVIEW.display.width * DEFAULT_WIDTH_RATIO),
+    height: customHeight || Math.floor(WEBVIEW.display.height * DEFAULT_HEIGHT_RATIO),
     minWidth: 136,
     minHeight: 136,
   });
