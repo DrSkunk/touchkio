@@ -80,8 +80,24 @@ const init = async () => {
   }
 
   // Parse custom resolution arguments
-  const customWidth = ARGS.web_width ? parseInt(ARGS.web_width, 10) : null;
-  const customHeight = ARGS.web_height ? parseInt(ARGS.web_height, 10) : null;
+  let customWidth = null;
+  let customHeight = null;
+  if (ARGS.web_width) {
+    const parsed = parseInt(ARGS.web_width, 10);
+    if (!isNaN(parsed) && parsed > 0 && parsed <= 7680) {
+      customWidth = parsed;
+    } else {
+      console.warn(`Invalid web_width value: ${ARGS.web_width}, using default`);
+    }
+  }
+  if (ARGS.web_height) {
+    const parsed = parseInt(ARGS.web_height, 10);
+    if (!isNaN(parsed) && parsed > 0 && parsed <= 4320) {
+      customHeight = parsed;
+    } else {
+      console.warn(`Invalid web_height value: ${ARGS.web_height}, using default`);
+    }
+  }
 
   // Init global theme manager
   WEBVIEW.theme = {
