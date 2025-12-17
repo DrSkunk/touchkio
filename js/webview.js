@@ -88,7 +88,7 @@ const init = async () => {
     if (!isNaN(parsed) && parsed > 0 && parsed <= maxValue) {
       return parsed;
     }
-    console.warn(`Invalid ${name} value: ${value}, using default`);
+    console.warn(`Invalid ${name} value: ${value}. Must be a positive integer between 1 and ${maxValue}, using default instead.`);
     return null;
   };
   const customWidth = parseResolution(ARGS.web_width, MAX_WIDTH, "web_width");

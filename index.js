@@ -372,6 +372,7 @@ const promptArgs = async (proc) => {
   ];
 
   // Prompt questions and wait for the answers
+  const OPTIONAL_DIMENSION_KEYS = ["web_width", "web_height"];
   let args = {};
   let ignore = [];
   try {
@@ -397,7 +398,7 @@ const promptArgs = async (proc) => {
         const value = answer.trim() || fallback;
         if (key === "web_url") {
           args[key] = value.split(",").map((v) => v.trim());
-        } else if (["web_width", "web_height"].includes(key) && value === "") {
+        } else if (OPTIONAL_DIMENSION_KEYS.includes(key) && value === "") {
           // Skip empty width/height values
           continue;
         } else {
