@@ -91,8 +91,8 @@ const init = async () => {
     console.warn(`Invalid ${name} value: ${value}. Must be a positive integer between 1 and ${maxValue}, falling back to automatic sizing.`);
     return null;
   };
-  const customWidth = parseResolution(ARGS.web_width, MAX_WIDTH, "web_width");
-  const customHeight = parseResolution(ARGS.web_height, MAX_HEIGHT, "web_height");
+  const customWidth = parseResolution(ARGS.web_width, MAX_WIDTH, "--web-width");
+  const customHeight = parseResolution(ARGS.web_height, MAX_HEIGHT, "--web-height");
 
   // Init global theme manager
   WEBVIEW.theme = {
