@@ -592,8 +592,8 @@ const getDisplayStatus = () => {
     case "ddcutil":
       const ddcutil = execSyncCommand("sudo", ["ddcutil", "getvcp", "D6", "--brief"]);
       if (ddcutil !== null) {
-        // Output format: "VCP D6 C <current> <max>"
-        // Value 0x01 = On, 0x04 or 0x05 = Off/Standby
+        // Output format: "VCP D6 C <current> <max>" (decimal values)
+        // VCP D6 power mode: 1 = On, 4 = Standby, 5 = Off
         const match = ddcutil.match(/VCP D6 C (\d+) (\d+)/);
         if (match) {
           const value = parseInt(match[1], 10);
@@ -635,7 +635,7 @@ const setDisplayStatus = (status, callback = null) => {
       execAsyncCommand("xset", ["dpms", "force", status.toLowerCase()], callback);
       break;
     case "ddcutil":
-      // VCP code D6: Power mode - 0x01 = On, 0x05 = Off
+      // VCP D6 power mode: 1 = On, 5 = Off (using decimal values)
       const value = status === "ON" ? "1" : "5";
       execAsyncCommand("sudo", ["ddcutil", "setvcp", "D6", value], callback);
       break;
