@@ -34,6 +34,24 @@ global.WEBVIEW = global.WEBVIEW || {
 };
 
 /**
+ * Parses and validates a resolution value.
+ *
+ * @param {string|number} value - The resolution value to parse.
+ * @param {number} maxValue - The maximum allowed value.
+ * @param {string} name - The name of the parameter for error messages.
+ * @returns {number|null} The parsed resolution or null if invalid.
+ */
+const parseResolution = (value, maxValue, name) => {
+  if (value == null || value === "") return null;
+  const parsed = parseInt(value, 10);
+  if (!isNaN(parsed) && parsed > 0 && parsed <= maxValue) {
+    return parsed;
+  }
+  console.warn(`Invalid ${name} value: ${value}. Must be a positive integer between 1 and ${maxValue}, falling back to automatic sizing.`);
+  return null;
+};
+
+/**
  * Initializes the webview with the provided arguments.
  *
  * @returns {bool} Returns true if the initialization was successful.
@@ -82,15 +100,6 @@ const init = async () => {
   // Parse custom resolution arguments (8K display max dimensions)
   const MAX_WIDTH = 7680;
   const MAX_HEIGHT = 4320;
-  const parseResolution = (value, maxValue, name) => {
-    if (!value) return null;
-    const parsed = parseInt(value, 10);
-    if (!isNaN(parsed) && parsed > 0 && parsed <= maxValue) {
-      return parsed;
-    }
-    console.warn(`Invalid ${name} value: ${value}. Must be a positive integer between 1 and ${maxValue}, falling back to automatic sizing.`);
-    return null;
-  };
   const customWidth = parseResolution(ARGS.web_width, MAX_WIDTH, "--web-width");
   const customHeight = parseResolution(ARGS.web_height, MAX_HEIGHT, "--web-height");
 
