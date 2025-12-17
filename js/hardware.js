@@ -522,7 +522,7 @@ const getDisplayStatusPath = () => {
 };
 
 /**
- * Gets the available display status command checking for `wlopm`, `kscreen-doctor` and `xset`.
+ * Gets the available display status command checking for `wlopm`, `kscreen-doctor`, `xset` and `ddcutil`.
  *
  * @returns {string|null} The display status command or null if nothing was found.
  */
@@ -533,11 +533,25 @@ const getDisplayStatusCommand = () => {
     wayland: [
       { command: "wlopm", desktops: ["labwc", "wayfire", "unknown"] },
       { command: "kscreen-doctor", desktops: ["kde", "plasma", "unknown"] },
+      { command: "ddcutil", desktops: ["*"] },
     ],
-    x11: [{ command: "xset", desktops: ["*"] }],
+    x11: [
+      { command: "xset", desktops: ["*"] },
+      { command: "ddcutil", desktops: ["*"] },
+    ],
   }[type];
   for (const map of mapping || []) {
     if (commandExists(map.command) && map.desktops.some((d) => d === "*" || desktop.includes(d))) {
+      // Special check for ddcutil - verify VCP feature 0xD6 support
+      if (map.command === "ddcutil") {
+        if (sudoRights()) {
+          const output = execSyncCommand("sudo", ["ddcutil", "capabilities"]);
+          if (output && output.includes("Feature: D6")) {
+            return map.command;
+          }
+        }
+        continue;
+      }
       return map.command;
     }
   }
@@ -575,6 +589,18 @@ const getDisplayStatus = () => {
         return output ? "ON" : "OFF";
       }
       break;
+    case "ddcutil":
+      const ddcutil = execSyncCommand("sudo", ["ddcutil", "getvcp", "D6", "--brief"]);
+      if (ddcutil !== null) {
+        // Output format: "VCP D6 C <current> <max>"
+        // Value 0x01 = On, 0x04 or 0x05 = Off/Standby
+        const match = ddcutil.match(/VCP D6 C (\d+) (\d+)/);
+        if (match) {
+          const value = parseInt(match[1], 10);
+          return value === 1 ? "ON" : "OFF";
+        }
+      }
+      break;
   }
   return null;
 };
@@ -607,6 +633,11 @@ const setDisplayStatus = (status, callback = null) => {
       break;
     case "xset":
       execAsyncCommand("xset", ["dpms", "force", status.toLowerCase()], callback);
+      break;
+    case "ddcutil":
+      // VCP code D6: Power mode - 0x01 = On, 0x05 = Off
+      const value = status === "ON" ? "1" : "5";
+      execAsyncCommand("sudo", ["ddcutil", "setvcp", "D6", value], callback);
       break;
   }
 };
