@@ -79,25 +79,20 @@ const init = async () => {
     WEBVIEW.display = { width: 800, height: 600 };
   }
 
-  // Parse custom resolution arguments
-  let customWidth = null;
-  let customHeight = null;
-  if (ARGS.web_width) {
-    const parsed = parseInt(ARGS.web_width, 10);
-    if (!isNaN(parsed) && parsed > 0 && parsed <= 7680) {
-      customWidth = parsed;
-    } else {
-      console.warn(`Invalid web_width value: ${ARGS.web_width}, using default`);
+  // Parse custom resolution arguments (8K display max dimensions)
+  const MAX_WIDTH = 7680;
+  const MAX_HEIGHT = 4320;
+  const parseResolution = (value, maxValue, name) => {
+    if (!value) return null;
+    const parsed = parseInt(value, 10);
+    if (!isNaN(parsed) && parsed > 0 && parsed <= maxValue) {
+      return parsed;
     }
-  }
-  if (ARGS.web_height) {
-    const parsed = parseInt(ARGS.web_height, 10);
-    if (!isNaN(parsed) && parsed > 0 && parsed <= 4320) {
-      customHeight = parsed;
-    } else {
-      console.warn(`Invalid web_height value: ${ARGS.web_height}, using default`);
-    }
-  }
+    console.warn(`Invalid ${name} value: ${value}, using default`);
+    return null;
+  };
+  const customWidth = parseResolution(ARGS.web_width, MAX_WIDTH, "web_width");
+  const customHeight = parseResolution(ARGS.web_height, MAX_HEIGHT, "web_height");
 
   // Init global theme manager
   WEBVIEW.theme = {
