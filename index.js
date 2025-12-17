@@ -295,6 +295,9 @@ const parseArgs = (proc) => {
   );
 };
 
+// Optional dimension keys that can be left empty during setup
+const OPTIONAL_DIMENSION_KEYS = ["web_width", "web_height"];
+
 /**
  * Prompts argument values on the command-line.
  *
@@ -323,6 +326,16 @@ const promptArgs = async (proc) => {
       key: "web_zoom",
       question: "Enter WEB zoom level",
       fallback: "1.25",
+    },
+    {
+      key: "web_width",
+      question: "Enter WEB window width (leave empty for auto)",
+      fallback: "",
+    },
+    {
+      key: "web_height",
+      question: "Enter WEB window height (leave empty for auto)",
+      fallback: "",
     },
     {
       key: "web_widget",
@@ -387,6 +400,9 @@ const promptArgs = async (proc) => {
         const value = answer.trim() || fallback;
         if (key === "web_url") {
           args[key] = value.split(",").map((v) => v.trim());
+        } else if (OPTIONAL_DIMENSION_KEYS.includes(key) && value === "") {
+          // Skip empty width/height values
+          continue;
         } else {
           args[key] = value;
         }

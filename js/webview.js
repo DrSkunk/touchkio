@@ -33,6 +33,30 @@ global.WEBVIEW = global.WEBVIEW || {
   },
 };
 
+// Resolution constants
+const MAX_WIDTH = 7680; // 8K display max width
+const MAX_HEIGHT = 4320; // 8K display max height
+const DEFAULT_WIDTH_RATIO = 0.85; // Default window width as percentage of display
+const DEFAULT_HEIGHT_RATIO = 0.75; // Default window height as percentage of display
+
+/**
+ * Parses and validates a resolution value.
+ *
+ * @param {string|number} value - The resolution value to parse.
+ * @param {number} maxValue - The maximum allowed value.
+ * @param {string} name - The name of the parameter for error messages.
+ * @returns {number|null} The parsed resolution or null if invalid.
+ */
+const parseResolution = (value, maxValue, name) => {
+  if (value === null || value === undefined || value === "") return null;
+  const parsed = parseInt(value, 10);
+  if (!isNaN(parsed) && parsed > 0 && parsed <= maxValue) {
+    return parsed;
+  }
+  console.warn(`Invalid ${name} value: ${value}. Must be a positive integer between 1 and ${maxValue}, falling back to automatic sizing.`);
+  return null;
+};
+
 /**
  * Initializes the webview with the provided arguments.
  *
@@ -78,6 +102,10 @@ const init = async () => {
   if (!WEBVIEW.display.width || !WEBVIEW.display.height) {
     WEBVIEW.display = { width: 800, height: 600 };
   }
+
+  // Parse custom resolution arguments
+  const customWidth = parseResolution(ARGS.web_width, MAX_WIDTH, "--web-width");
+  const customHeight = parseResolution(ARGS.web_height, MAX_HEIGHT, "--web-height");
 
   // Init global theme manager
   WEBVIEW.theme = {
@@ -141,8 +169,8 @@ const init = async () => {
     icon: APP.icon,
     autoHideMenuBar: true,
     frame: !WEBVIEW.statusEnabled,
-    width: Math.floor(WEBVIEW.display.width * 0.85),
-    height: Math.floor(WEBVIEW.display.height * 0.75),
+    width: customWidth || Math.floor(WEBVIEW.display.width * DEFAULT_WIDTH_RATIO),
+    height: customHeight || Math.floor(WEBVIEW.display.height * DEFAULT_HEIGHT_RATIO),
     minWidth: 136,
     minHeight: 136,
   });
